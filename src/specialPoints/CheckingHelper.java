@@ -1,9 +1,14 @@
 package specialPoints;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+
+import static java.lang.Math.abs;
 
 /**
  * Created by Dasha on 24.03.2015.
@@ -31,8 +36,10 @@ public class CheckingHelper {
                 }
             }
         }
-        endPoints.removeAll(branchPoints);
-        branchPoints.removeAll(endPoints);
+        endPoints = removeNoises(endPoints);
+        branchPoints = removeNoises(branchPoints);
+        System.out.println("Number of endPoints: " + endPoints.size());
+        System.out.println("Number of branchPoints: " + branchPoints.size());
     }
 
     private int getNumberOfBlackNeighbors( int i, int j) {
@@ -43,6 +50,18 @@ public class CheckingHelper {
             }
         }
         return count;
+    }
+
+    private Set<Point> removeNoises(Set<Point> setToClean) {
+        Set<Point> result = new HashSet<>();
+        while (!setToClean.isEmpty()) {
+            Point x = setToClean.iterator().next();
+            result.add(x);
+            setToClean.remove(x);
+            endPoints.removeIf(point -> abs(point.getX() - x.getX()) < 5 && abs(point.getY() - x.getY()) < 5);
+            branchPoints.removeIf(point -> abs(point.getX() - x.getX()) < 5 && abs(point.getY() - x.getY()) < 5);
+        }
+        return result;
     }
 
 
