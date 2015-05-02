@@ -1,5 +1,6 @@
 package binarization;
 
+import frontend.WindowApp;
 import matchingPoints.MatcherHelper;
 import skeletonization.TemplatesMethod;
 import specialPoints.CheckingHelper;
@@ -17,7 +18,10 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         File original_f = new File("Image7b.png");
+        String firstImageName = original_f.getName();
         File original_f1 = new File("Image7a.png");
+        String secondImageName = original_f1.getName();
+
         //Binarization
         BufferedImage original = ImageIO.read(original_f);
         BufferedImage grayscale = Util.toGray(original);
@@ -40,16 +44,23 @@ public class Main {
 
         CheckingHelper helper1 = new CheckingHelper(skeletonized1);
         helper1.pointsToClasses();
-        java.util.Set<Point> endPoints1 = helper1.getEndPoints();
-        java.util.Set<Point> branchPoints1 = helper1.getBranchPoints();
+        java.util.Set<Point> endPoints2 = helper1.getEndPoints();
+        java.util.Set<Point> branchPoints2 = helper1.getBranchPoints();
 
         //Matching points
         MatcherHelper matcherHelper = new MatcherHelper();
-        int matchedPoints = matcherHelper.calculateMatchedPoints(endPoints, endPoints1) +
-                matcherHelper.calculateMatchedPoints(branchPoints, branchPoints1);
+        int matchedPoints = matcherHelper.calculateMatchedPoints(endPoints, endPoints2) +
+                matcherHelper.calculateMatchedPoints(branchPoints, branchPoints2);
+        double percents = matchedPoints * 100 /(endPoints.size() + branchPoints.size());
         System.out.println(String.format("Finger prints match on %d percents",
                 matchedPoints * 100 /(endPoints.size() + branchPoints.size())));
 
-        }
+        WindowApp windowApp = new WindowApp();
+        windowApp.createGUI(firstImageName, secondImageName,
+                String.valueOf(branchPoints.size()), String.valueOf(branchPoints2.size()),
+                String.valueOf(endPoints.size()), String.valueOf(endPoints2.size()),
+                String.valueOf(percents));
     }
+
+}
 
