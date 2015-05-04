@@ -22,13 +22,13 @@ public class TemplatesMethod {
             times++;
         }
         needContinue = false;
-        System.out.println(times);
+        System.out.println(String.format("First stage of skeletonization finished after %d iterations", times));
         times = 0;
         while (needContinue) {
             temp = oneStageProcessing(temp, 1);
             times++;
         }
-        System.out.println(times);
+        System.out.println(String.format("Second stage of skeletonization finished after %d iterations", times));
         return temp;
     }
 
