@@ -6,6 +6,7 @@ import skeletonization.TemplatesMethod;
 import specialPoints.CheckingHelper;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -54,13 +55,15 @@ public class Main {
                 matcherHelper.calculateMatchedPoints(branchPoints, branchPoints2);
         double percents = matchedPoints * 100 /(endPoints.size() + branchPoints.size());
         System.out.println(String.format("Finger prints match on %d percents",
-                matchedPoints * 100 /(endPoints.size() + branchPoints.size())));
+                matchedPoints * 100 / (endPoints.size() + branchPoints.size())));
 
-        WindowApp windowApp = new WindowApp();
-        windowApp.createGUI(firstImageName, secondImageName,
-                String.valueOf(branchPoints.size()), String.valueOf(branchPoints2.size()),
-                String.valueOf(endPoints.size()), String.valueOf(endPoints2.size()),
-                String.valueOf(percents));
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            JFrame.setDefaultLookAndFeelDecorated(true);
+            WindowApp.createGUI(firstImageName, secondImageName,
+                    String.valueOf(branchPoints.size()), String.valueOf(branchPoints2.size()),
+                    String.valueOf(endPoints.size()), String.valueOf(endPoints2.size()),
+                    String.valueOf(percents));
+        });
     }
 
 }
